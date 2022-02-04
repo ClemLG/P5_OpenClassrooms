@@ -13,7 +13,7 @@ function fetchProductsAndInject() {
             // Logique
             for(let i = 0; i < products.length; i++) {
                 const product = products[i]
-                itemsEL.innerHTML = itemsEL.innerHTML + `
+                itemsEl.innerHTML = itemsEl.innerHTML + `
 <a href="">
    <article>
        <img src="${product.imageUrl}" alt="${product.altTxt}">
