@@ -18,7 +18,58 @@ fetch(`http://localhost:3000/api/products/${id}`)
         const itemTitle = document.getElementById('title')
         itemTitle.innerHTML = `<h1 id="title">${product.name}</h1>`
         const itemPrice = document.getElementById('price')
-        itemPrice.innerHTML = ` <p>Prix : <span id="price">${product.price}</span>€</p>`
+        itemPrice.innerHTML = `<span id="price">${product.price}</span>`
         const itemDesc = document.getElementById('description')
         itemDesc.innerHTML = `<p id="description">${product.description}</p>`
+        console.log(product.colors[0]);
+        const itemSelect = document.getElementById('colors')
+        for(let i = 0; i < product.colors.length; i++){
+            console.log('On rajoute les couleurs: ' + product.colors);
+            itemSelect.innerHTML += `<option value="${product.colors[i]}">${product.colors[i]}</option>`
+        }
     })
+
+    .catch(function(err) {
+
+    })
+
+    // ON VEUT QUE NOTRE PANIER SOIT UN TABLEAU QUI STOCK A LA FOIS L'ID DU PRODUIT/ LA QUANTITE DU PRODUIT/ LA COULEUR DU PRODUIT
+
+//On écoute le click de l'utilisateur sur le bouton 'ajouter au panier'
+//On execute un callback qui vient recuperer les données choisit par l'utilisateur
+//On stock les données dans le local storage 
+
+
+const buttonAddItem = document.getElementById('addToCart')
+buttonAddItem.addEventListener('click', function() {
+    //RECUPERATION 
+    let itemColors = document.getElementById('colors')
+    let selectedColor = itemColors.value
+    console.log(selectedColor)
+    let itemQty = document.getElementById('quantity')
+    let qty = parseInt(itemQty.value)
+    console.log(qty);
+
+    //VERIFICATION
+    if(selectedColor === null || selectedColor === "" || qty === 0) {
+        return
+    }
+
+    //ON STOCK LES DONNEES DANS LE LOCAL STORAGE
+    //RECUPERATION
+    const key = id + selectedColor
+    const keyValueQty = localStorage.getItem(key)  
+    console.log(keyValueQty);
+    
+    //VERIFICATION
+    //SI LA CLE EST VIDE ON AJOUTE LA QUANTITE INITIALE SAISIE PAR L UTILISATEUR SINON ON AJOUTE SUR LA QUANTITE EXISTANTE
+    if(!keyValueQty) {
+        localStorage.setItem(key, qty)
+    } else {
+        const newQtyAdded = parseInt(keyValueQty) + qty
+        //ON REMPLACE LA VALEUR EXISTANTE PAR LA NOUVELLE SUR LA MEME CLE
+        localStorage.setItem(key, newQtyAdded)
+    }
+})
+
+

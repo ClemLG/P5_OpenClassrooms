@@ -27,6 +27,6 @@ function fetchProductsAndInject(){
         })
 }
 
-
 // Execution
+
 fetchProductsAndInject()

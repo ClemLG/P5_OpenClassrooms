@@ -1,3 +1,4 @@
+
 /**
  * Vérifie si la réponse est ok et retourne le résultat de la méthode JSON de l'objet "Response"
  *
@@ -9,4 +10,3 @@ function handleResponse(response){
         return response.json()
     }
 }
-
