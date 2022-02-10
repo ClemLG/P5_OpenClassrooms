@@ -32,8 +32,7 @@ fetch(`http://localhost:3000/api/products/${id}`)
     .catch(function(err) {
 
     })
-
-    // ON VEUT QUE NOTRE PANIER SOIT UN TABLEAU QUI STOCK A LA FOIS L'ID DU PRODUIT/ LA QUANTITE DU PRODUIT/ LA COULEUR DU PRODUIT
+/*-------------------------------------LOCAL STORAGE---------------------------------------------*/
 
 //On écoute le click de l'utilisateur sur le bouton 'ajouter au panier'
 //On execute un callback qui vient recuperer les données choisit par l'utilisateur
@@ -45,31 +44,50 @@ buttonAddItem.addEventListener('click', function() {
     //RECUPERATION 
     let itemColors = document.getElementById('colors')
     let selectedColor = itemColors.value
-    console.log(selectedColor)
     let itemQty = document.getElementById('quantity')
     let qty = parseInt(itemQty.value)
-    console.log(qty);
 
     //VERIFICATION
-    if(selectedColor === null || selectedColor === "" || qty === 0) {
+    if (selectedColor === null || selectedColor === "" || qty === 0) {
         return
     }
 
-    //ON STOCK LES DONNEES DANS LE LOCAL STORAGE
-    //RECUPERATION
-    const key = id + selectedColor
-    const keyValueQty = localStorage.getItem(key)  
-    console.log(keyValueQty);
-    
-    //VERIFICATION
-    //SI LA CLE EST VIDE ON AJOUTE LA QUANTITE INITIALE SAISIE PAR L UTILISATEUR SINON ON AJOUTE SUR LA QUANTITE EXISTANTE
-    if(!keyValueQty) {
-        localStorage.setItem(key, qty)
-    } else {
-        const newQtyAdded = parseInt(keyValueQty) + qty
-        //ON REMPLACE LA VALEUR EXISTANTE PAR LA NOUVELLE SUR LA MEME CLE
-        localStorage.setItem(key, newQtyAdded)
+// TABLEAU DANS LE LOCAL STORAGE QUI VA STOCKER LES DONNEES AJOUTEES PAR L UTLILISATEUR AU CLICK
+    let arrayProductLS = []
+
+// OBJECT QUI VA RECUPERER LES DONNEES DANS LE LOCAL STORAGE
+
+    let productAdded = {
+        productID: id,
+        color: selectedColor,
+        quantity: qty
+    }
+    //
+    const keyValueQty = localStorage.getItem(`${productAdded.quantity}`)
+    if(keyValueQty !== null) {
+        const newQtyAdded = `${productAdded.quantity}` + `${productAdded.quantity}`
+        localStorage.setItem(`${productAdded.quantity}`, newQtyAdded)
     }
 })
 
 
+
+
+/*
+//ON STOCK LES DONNEES DANS LE LOCAL STORAGE
+//RECUPERATION
+    const key = id + selectedColor
+    const keyValueQty = localStorage.getItem(key)
+console.log(keyValueQty);
+
+
+//VERIFICATION
+//SI LA CLE EST VIDE ON AJOUTE LA QUANTITE INITIALE SAISIE PAR L UTILISATEUR SINON ON AJOUTE SUR LA QUANTITE EXISTANTE
+if(!keyValueQty) {
+    localStorage.setItem(key, qty)
+} else {
+    const newQtyAdded = parseInt(keyValueQty) + qty
+    //ON REMPLACE LA VALEUR EXISTANTE PAR LA NOUVELLE SUR LA MEME CLE
+    localStorage.setItem(key, newQtyAdded)
+}
+*/
