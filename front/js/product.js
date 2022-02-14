@@ -52,42 +52,39 @@ buttonAddItem.addEventListener('click', function() {
         return
     }
 
-// TABLEAU DANS LE LOCAL STORAGE QUI VA STOCKER LES DONNEES AJOUTEES PAR L UTLILISATEUR AU CLICK
-    let arrayProductLS = []
+// SI DANS LE LOCAL STORAGE IL N Y A PAS LA MAP, ON LA CREEE 
+// SINON ON VIENT LA RECUPERER ET ON TRAVAILLE AVEC
 
-// OBJECT QUI VA RECUPERER LES DONNEES DANS LE LOCAL STORAGE
+let mapProductLS 
 
-    let productAdded = {
-        productID: id,
-        color: selectedColor,
-        quantity: qty
-    }
-    //
-    const keyValueQty = localStorage.getItem(`${productAdded.quantity}`)
-    if(keyValueQty !== null) {
-        const newQtyAdded = `${productAdded.quantity}` + `${productAdded.quantity}`
-        localStorage.setItem(`${productAdded.quantity}`, newQtyAdded)
-    }
+if(!localStorage.productMap) {
+    mapProductLS = new Map();
+    localStorage.productMap = JSON.stringify(Array.from(mapProductLS.entries()));
+} else {
+    mapProductLS = new Map(JSON.parse(localStorage.productMap))
+}
+
+//ON DECLARE LES CLES QUI VONT CONSTITUER LA MAP
+const key = id + selectedColor
+const keyValueQty = mapProductLS.get(key)
+console.log(keyValueQty);
+
+//VERIFICATION
+//SI LA CLE EST VIDE ON AJOUTE LA QUANTITE INITIALE SAISIE PAR L UTILISATEUR SINON ON AJOUTE SUR LA QUANTITE EXISTANTE
+if(!keyValueQty) {
+mapProductLS.set(key, qty)
+} else {
+const newQtyAdded = parseInt(keyValueQty) + qty
+//ON REMPLACE LA VALEUR EXISTANTE PAR LA NOUVELLE SUR LA MEME CLE
+mapProductLS.set(key, newQtyAdded)
+}
+
+//ON INITIALISE LE NOUVEAU RESULTAT DANS LE LOCAL STORAGE
+localStorage.productMap = JSON.stringify(Array.from(mapProductLS.entries()));
+
 })
 
 
 
 
-/*
-//ON STOCK LES DONNEES DANS LE LOCAL STORAGE
-//RECUPERATION
-    const key = id + selectedColor
-    const keyValueQty = localStorage.getItem(key)
-console.log(keyValueQty);
 
-
-//VERIFICATION
-//SI LA CLE EST VIDE ON AJOUTE LA QUANTITE INITIALE SAISIE PAR L UTILISATEUR SINON ON AJOUTE SUR LA QUANTITE EXISTANTE
-if(!keyValueQty) {
-    localStorage.setItem(key, qty)
-} else {
-    const newQtyAdded = parseInt(keyValueQty) + qty
-    //ON REMPLACE LA VALEUR EXISTANTE PAR LA NOUVELLE SUR LA MEME CLE
-    localStorage.setItem(key, newQtyAdded)
-}
-*/
