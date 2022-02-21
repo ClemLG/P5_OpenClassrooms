@@ -49,13 +49,16 @@ let totalPrice = 0
 
 for(let i=0; i < productsInLS.length; i++) {
     //Pour chaque item du panier je veux récuperer sa quantité et stocker le total
-    totalQtyItems = totalQty += productsInLS[i].quantity
-    totalPriceItems = totalPrice += productsInLS[i].price
+  totalQty = totalQty + productsInLS[i].quantity
+  console.log('Je rajoute la quantité: ' + productsInLS[i].quantity);
+  
+  totalPrice = totalPrice + productsInLS[i].quantity * productsInLS[i].price
+  console.log('Je rajoute le prix: ' + productsInLS[i].quantity * productsInLS[i].price);
 }
-console.log('Quantité de produits dans le panier: ' + totalQtyItems);
-console.log('Prix total: ' + totalPriceItems);
-totalQtyItemsElement.innerHTML = totalQtyItems
-totalPriceItemsElement.innerHTML = totalPriceItems
+console.log('Quantité de produits dans le panier: ' + totalQty);
+console.log('Prix total: ' + totalPrice);
+totalQtyItemsElement.innerHTML = totalQty
+totalPriceItemsElement.innerHTML = totalPrice
 
 
 
