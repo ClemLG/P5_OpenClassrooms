@@ -11,7 +11,7 @@ if(!productsInLS){
 } else {
     //On parcours le tableau du panier et on affiche chaque produit
     for(let i= 0; i < productsInLS.length; i++) {
-        console.log('Clés du tableau: ' + i)
+        console.log('Clé du tableau n°: ' + i)
         itemIteration = productsInLS[i]
         injectCartSection.innerHTML += `
         <article class="cart__item" data-id=${itemIteration.id} data-color=${itemIteration.color}>
@@ -27,7 +27,7 @@ if(!productsInLS){
                   <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity">
                       <p>Qté : ${itemIteration.quantity}</p>
-                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="42">
+                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value=${itemIteration.quantity}>
                     </div>
                     <div class="cart__item__content__settings__delete">
                       <p class="deleteItem">Supprimer</p>
@@ -38,3 +38,29 @@ if(!productsInLS){
         `
     }
 }
+
+//On calcule la valeur totale du panier
+//On commence par calculer la quantité totale de produits dans le panier
+
+let totalQtyItemsElement = document.getElementById('totalQuantity')
+let totalPriceItemsElement = document.getElementById('totalPrice')
+let totalQty = 0
+let totalPrice = 0
+
+for(let i=0; i < productsInLS.length; i++) {
+    //Pour chaque item du panier je veux récuperer sa quantité et stocker le total
+    totalQtyItems = totalQty += productsInLS[i].quantity
+    totalPriceItems = totalPrice += productsInLS[i].price
+}
+console.log('Quantité de produits dans le panier: ' + totalQtyItems);
+console.log('Prix total: ' + totalPriceItems);
+totalQtyItemsElement.innerHTML = totalQtyItems
+totalPriceItemsElement.innerHTML = totalPriceItems
+
+
+
+
+
+
+
+
