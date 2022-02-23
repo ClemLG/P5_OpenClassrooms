@@ -51,17 +51,20 @@ for(let i=0; i < productsInLS.length; i++) {
     //Pour chaque item du panier je veux récuperer sa quantité et stocker le total
   totalQty = totalQty + productsInLS[i].quantity
   console.log('Je rajoute la quantité: ' + productsInLS[i].quantity);
-  
+    //Pour chaque item du panier je veux récuperer son prix et le stocker dans le total
   totalPrice = totalPrice + productsInLS[i].quantity * productsInLS[i].price
   console.log('Je rajoute le prix: ' + productsInLS[i].quantity * productsInLS[i].price);
 }
+
 console.log('Quantité de produits dans le panier: ' + totalQty);
 console.log('Prix total: ' + totalPrice);
+
 totalQtyItemsElement.innerHTML = totalQty
 totalPriceItemsElement.innerHTML = totalPrice
 
-
-
+//Modification de la quantité
+//Recuperation de l'element sur lequel on ecoute l'evenement
+let modifQty = document.querySelectorAll('.itemQuantity')
 
 
 
