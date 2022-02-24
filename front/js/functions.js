@@ -31,11 +31,11 @@ function initializeCartArray() {
 }
 
 /**
- * Parse l'élement dans lequel
- * Si vide, on ajoute ce panier ce sous forme de tableau et on le converti en JSON / Sinon on parse celui déjà présent pour pouvoir le modifier et on le retourne par la suite
+ * Parse l'item panier du local storage
+ * Lors de l'appel de la fonction, celle ci parse le panier contenu dans le local storage
  *
  * @param ()
- * @returns {JSON Parse}
+ * @returns {JSON Parse LocalStorage item}
  */
 function parseLS() {
     return JSON.parse(localStorage.getItem("panier"))

@@ -90,11 +90,11 @@ function modifCartElements() {
             let itemModifQty = modifQty[q].previousElementSibling.innerHTML = "Qté : " + modifQty[q].value
             console.log("La nouvelle quantité: " + itemModifQty)
             //On recupère dans le localstorage le produit dont l'id et la couleur correspondent avec celui qui vient d'être modifié
-            let itemModifLS = JSON.stringify(productsInLS)
-            for(let j = 0; j < itemModifLS.length; j++){
-                localStorage.getItem('panier')
-            }
+            let itemModifQtyLS = productsInLS[q].quantity
+            console.log('Quantité initiale du local storage: ' + itemModifQtyLS)
             //On modifie dans le localstorage la quantité du produit pour refleter la nouvelle quantité
+
+                localStorage.setItem("panier", JSON.stringify(productsInLS))
             //On recalcule la somme du panier en utilisant la fonction sumCartCalculate
         })
 }
