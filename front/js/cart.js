@@ -128,4 +128,16 @@ function deleteCartElements() {
 
 deleteCartElements()
 
+//Récupération et vérification des données du formulaire
 
+function getForm() {
+    //Récupèration de l'élement HTML du formulaire
+    let form = document.querySelector('cart_order_form')
+    //Création des REGEX
+    let letterFieldsRegex = /^[a-zA-Z],.'-]+$");
+    let emailRegex = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
+    let addressRegex = new RegExp("^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
+
+}
+
+getForm()
