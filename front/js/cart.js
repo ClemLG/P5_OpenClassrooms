@@ -128,7 +128,7 @@ function deleteCartElements() {
 
 deleteCartElements()
 
-/******************************Récupération & Analyse du formulaire******************************/
+/******************************Analyse & Envoi du formulaire******************************/
 
 function getForm() {
     //Récupèration de l'élement HTML du formulaire
@@ -163,7 +163,6 @@ function getForm() {
         validEmail(this)
     })
 
-
     //VALIDATION DES INPUTS
 
     //Validation First Name
@@ -175,9 +174,11 @@ function getForm() {
         if(!testFirstName){
             let firstNameError = document.querySelector('.cart__order__form__question #firstNameErrorMsg')
             firstNameError.innerHTML = "Le prénom ne doit pas comporter de chiffres ou de caractères spéciaux"
+            return false
         } else {
             let firstNameError = document.querySelector('.cart__order__form__question #firstNameErrorMsg')
             firstNameError.innerHTML = ""
+            return true
         }
     }
 
@@ -190,9 +191,11 @@ function getForm() {
         if(!testLastName){
             let lastNameError = document.querySelector('.cart__order__form__question #lastNameErrorMsg')
             lastNameError.innerHTML = "Le nom ne doit pas comporter de chiffres ou de caractères spéciaux"
+            return false
         } else {
-        let lastNameError = document.querySelector('.cart__order__form__question #lastNameErrorMsg')
-        lastNameError.innerHTML = ""
+            let lastNameError = document.querySelector('.cart__order__form__question #lastNameErrorMsg')
+            lastNameError.innerHTML = ""
+            return true
         }
     }
 
@@ -205,24 +208,28 @@ function getForm() {
         if(!testCity){
             let cityError = document.querySelector('.cart__order__form__question #cityErrorMsg')
             cityError.innerHTML = "La ville ne doit pas comporter de chiffres ou de caractères spéciaux"
+            return false
         } else {
-        let cityError = document.querySelector('.cart__order__form__question #cityErrorMsg')
-        cityError.innerHTML = ""
+            let cityError = document.querySelector('.cart__order__form__question #cityErrorMsg')
+            cityError.innerHTML = ""
+            return true
         }
     }
 
     //Validation Adresse
     function validAddress(inputAddress) {
         //Regex pour la validation Address
-        let addressRegExp = /^[a-zA-Z0-9\s,.'-]*$/
+        let addressRegExp = /^[a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\s,.'-]*$/
         let testAddress = addressRegExp.test(inputAddress.value)
         console.log('Résultat test regex Adresse: ' + testAddress)
         if(!testAddress){
             let addressError = document.querySelector('.cart__order__form__question #addressErrorMsg')
             addressError.innerHTML = "Adresse incorrecte"
+            return false
         } else {
-        let addressError = document.querySelector('.cart__order__form__question #addressErrorMsg')
-        addressError.innerHTML = ""
+            let addressError = document.querySelector('.cart__order__form__question #addressErrorMsg')
+            addressError.innerHTML = ""
+            return true
         }
     }
 
@@ -235,15 +242,35 @@ function getForm() {
         if(!testEmail){
             let emailError = document.querySelector('.cart__order__form__question #emailErrorMsg')
             emailError.innerHTML = "Email Incorrect"
+            return false
         } else {
-        let emailError = document.querySelector('.cart__order__form__question #emailErrorMsg')
-        emailError.innerHTML = ""
+            let emailError = document.querySelector('.cart__order__form__question #emailErrorMsg')
+            emailError.innerHTML = ""
+            return true
         }
     }
+
+    //ANALYSE DU FORMULAIRE ET ENVOI DES DONNEES
+
+    //Ecoute du bouton submit
+    let submitButton = document.querySelector('#order')
+    submitButton.addEventListener('click', function(e) {
+        //La soumission du formulaire n'étant pour l'instant pas sécurisée, nous cassons l'action du submit pour pouvoir avant vérifier si tous les champs renvoient true
+        e.preventDefault()
+        if(validFirstName(form.firstName) && validLastName(form.lastName) && validCity(form.city) && validAddress(form.address) && (validEmail(form.email))){
+            //Si tous les champs renvoient true, alors on constitue un objet contact et un tableau de produit qu'on envoi à l'api
+            console.log('Envoi formulaire valide')
+            const contact = {
+                firstName:
+            }
+        } else {
+            //On ne fait rien
+            console.log('Envoi formulaire non Valide')
+        }
+    })
 }
 
 getForm()
-
 
 
 
