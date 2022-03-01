@@ -128,16 +128,122 @@ function deleteCartElements() {
 
 deleteCartElements()
 
-//Récupération et vérification des données du formulaire
+/******************************Récupération & Analyse du formulaire******************************/
 
 function getForm() {
     //Récupèration de l'élement HTML du formulaire
-    let form = document.querySelector('cart_order_form')
-    //Création des REGEX
-    let letterFieldsRegex = /^[a-zA-Z],.'-]+$");
-    let emailRegex = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
-    let addressRegex = new RegExp("^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
+    let form = document.querySelector('.cart__order__form')
+    console.log('le formulaire: ' + form)
+    console.log('input du Prénom: ' + form.firstName)
 
+    //ÉCOUTE DES INPUTS
+
+    //First Name
+    form.firstName.addEventListener('change', function() {
+    validFirstName(this)
+    })
+
+    //Last Name
+    form.lastName.addEventListener('change', function() {
+    validLastName(this)
+    })
+
+    //City
+    form.city.addEventListener('change', function() {
+    validCity(this)
+    })
+
+    //Address
+    form.address.addEventListener('change', function() {
+        validAddress(this)
+    })
+
+    //Email
+    form.email.addEventListener('change', function() {
+        validEmail(this)
+    })
+
+
+    //VALIDATION DES INPUTS
+
+    //Validation First Name
+    function validFirstName(inputFirstName) {
+        //Regex pour la validation First Name
+        let firstNameRegExp = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ ,.\'-]+$/i
+        let testFirstName = firstNameRegExp.test(inputFirstName.value)
+        console.log('Résultat test regex firstName: ' + testFirstName)
+        if(!testFirstName){
+            let firstNameError = document.querySelector('.cart__order__form__question #firstNameErrorMsg')
+            firstNameError.innerHTML = "Le prénom ne doit pas comporter de chiffres ou de caractères spéciaux"
+        } else {
+            let firstNameError = document.querySelector('.cart__order__form__question #firstNameErrorMsg')
+            firstNameError.innerHTML = ""
+        }
+    }
+
+    //Validation Last Name
+    function validLastName(inputLastName) {
+        //Regex pour la validation Last Name
+        let lastNameRegExp = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ ,.\'-]+$/i
+        let testLastName = lastNameRegExp.test(inputLastName.value)
+        console.log('Résultat test regex lastName: ' + testLastName)
+        if(!testLastName){
+            let lastNameError = document.querySelector('.cart__order__form__question #lastNameErrorMsg')
+            lastNameError.innerHTML = "Le nom ne doit pas comporter de chiffres ou de caractères spéciaux"
+        } else {
+        let lastNameError = document.querySelector('.cart__order__form__question #lastNameErrorMsg')
+        lastNameError.innerHTML = ""
+        }
+    }
+
+    //Validation City
+    function validCity(inputCity) {
+        //Regex pour la validation City
+        let cityRegExp = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ ,.\'-]+$/i
+        let testCity= cityRegExp.test(inputCity.value)
+        console.log('Résultat test regex City: ' + testCity)
+        if(!testCity){
+            let cityError = document.querySelector('.cart__order__form__question #cityErrorMsg')
+            cityError.innerHTML = "La ville ne doit pas comporter de chiffres ou de caractères spéciaux"
+        } else {
+        let cityError = document.querySelector('.cart__order__form__question #cityErrorMsg')
+        cityError.innerHTML = ""
+        }
+    }
+
+    //Validation Adresse
+    function validAddress(inputAddress) {
+        //Regex pour la validation Address
+        let addressRegExp = /^[a-zA-Z0-9\s,.'-]*$/
+        let testAddress = addressRegExp.test(inputAddress.value)
+        console.log('Résultat test regex Adresse: ' + testAddress)
+        if(!testAddress){
+            let addressError = document.querySelector('.cart__order__form__question #addressErrorMsg')
+            addressError.innerHTML = "Adresse incorrecte"
+        } else {
+        let addressError = document.querySelector('.cart__order__form__question #addressErrorMsg')
+        addressError.innerHTML = ""
+        }
+    }
+
+    //Validation Email
+    function validEmail(inputEmail) {
+        //Regex pour la validation Email
+        let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$','g')
+        let testEmail = emailRegExp.test(inputEmail.value)
+        console.log('Résultat test Email: ' + testEmail)
+        if(!testEmail){
+            let emailError = document.querySelector('.cart__order__form__question #emailErrorMsg')
+            emailError.innerHTML = "Email Incorrect"
+        } else {
+        let emailError = document.querySelector('.cart__order__form__question #emailErrorMsg')
+        emailError.innerHTML = ""
+        }
+    }
 }
 
 getForm()
+
+
+
+
