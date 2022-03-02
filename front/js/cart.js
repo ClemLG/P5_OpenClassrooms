@@ -260,19 +260,22 @@ function getForm() {
         if(validFirstName(form.firstName) && validLastName(form.lastName) && validCity(form.city) && validAddress(form.address) && (validEmail(form.email))){
             //Si tous les champs renvoient true, alors on constitue un objet contact et un tableau de produit qu'on envoi à l'api
             console.log('Envoi formulaire valide')
+
+            //On récupère chaque champs du formulaire
             let firstNameInput = document.getElementById('firstName')
             let lastNameInput = document.getElementById('lastName')
             let addressInput = document.getElementById('address')
             let cityInput = document.getElementById('city')
             let emailInput = document.getElementById('email')
 
-            //Construction d'un array depuis le local storage
+            //On créer le tableau qui va nous afficher l'id des produit du panier
             let idProducts = [];
             for (let i = 0; i < productsInLS.length;i++) {
                 idProducts.push(productsInLS[i].id);
             }
             console.log(idProducts);
 
+            //On créer et initialise l'objet contact conmprenant les champs ainsi que l'initialisation du tableau produit
             const order = {
                 contact : {
                     firstName:firstNameInput.value,
@@ -283,6 +286,10 @@ function getForm() {
                 },
                 products: idProducts,
             }
+            console.log("Données du formulaire envoyées à l'api: " + order.contact)
+            console.log("Id des produits du panier envoyés à l'api: " + order.contact)
+
+            //Conversion en JSON des données et envoi de la requete
             const sendDataOptions = {
                 method: 'POST',
                 body: JSON.stringify(order),
@@ -291,6 +298,8 @@ function getForm() {
                     "Content-Type": "application/json"
                 },
             };
+
+            //Récupération de la réponse de l'api et si validation affichage de la page confirmation
             fetch("http://localhost:3000/api/products/order", sendDataOptions)
                 .then(handleResponse)
                 .then((data) => {
