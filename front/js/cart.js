@@ -260,9 +260,48 @@ function getForm() {
         if(validFirstName(form.firstName) && validLastName(form.lastName) && validCity(form.city) && validAddress(form.address) && (validEmail(form.email))){
             //Si tous les champs renvoient true, alors on constitue un objet contact et un tableau de produit qu'on envoi à l'api
             console.log('Envoi formulaire valide')
-            const contact = {
-                firstName:
+            let firstNameInput = document.getElementById('firstName')
+            let lastNameInput = document.getElementById('lastName')
+            let addressInput = document.getElementById('address')
+            let cityInput = document.getElementById('city')
+            let emailInput = document.getElementById('email')
+
+            //Construction d'un array depuis le local storage
+            let idProducts = [];
+            for (let i = 0; i < productsInLS.length;i++) {
+                idProducts.push(productsInLS[i].id);
             }
+            console.log(idProducts);
+
+            const commandDatas = {
+                contact : {
+                    firstName:firstNameInput.value,
+                    lastName:lastNameInput.value,
+                    address:addressInput.value,
+                    city:cityInput.value,
+                    email:emailInput.value
+                },
+                products: idProducts,
+            }
+            const sendDataOptions = {
+                method: 'POST',
+                body: JSON.stringify(commandDatas),
+                headers: {
+                    'Accept': 'application/json',
+                    "Content-Type": "application/json"
+                },
+            };
+            fetch("http://localhost:3000/api/products/order", sendDataOptions)
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    localStorage.setItem("orderId", data.orderId);
+
+                    document.location.href = "confirmation.html";
+                })
+                .catch((err) => {
+                    alert ("Problème avec fetch : " + err.message);
+                });
         } else {
             //On ne fait rien
             console.log('Envoi formulaire non Valide')
