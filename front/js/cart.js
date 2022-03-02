@@ -273,7 +273,7 @@ function getForm() {
             }
             console.log(idProducts);
 
-            const commandDatas = {
+            const order = {
                 contact : {
                     firstName:firstNameInput.value,
                     lastName:lastNameInput.value,
@@ -285,14 +285,14 @@ function getForm() {
             }
             const sendDataOptions = {
                 method: 'POST',
-                body: JSON.stringify(commandDatas),
+                body: JSON.stringify(order),
                 headers: {
                     'Accept': 'application/json',
                     "Content-Type": "application/json"
                 },
             };
             fetch("http://localhost:3000/api/products/order", sendDataOptions)
-                .then((response) => response.json())
+                .then(handleResponse)
                 .then((data) => {
                     console.log(data);
                     localStorage.setItem("orderId", data.orderId);
@@ -300,7 +300,7 @@ function getForm() {
                     document.location.href = "confirmation.html";
                 })
                 .catch((err) => {
-                    alert ("Problème avec fetch : " + err.message);
+                    alert ("Request Error : " + err.message);
                 });
         } else {
             //On ne fait rien
