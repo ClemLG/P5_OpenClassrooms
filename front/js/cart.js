@@ -111,6 +111,7 @@ function modifCartElements() {
             console.log("La nouvelle quantité: " + itemModifQty)
             //On recupère dans le localstorage le produit dont l'id et la couleur correspondent avec celui qui vient d'être modifié
             //On modifie dans le localstorage la quantité du produit pour refleter la nouvelle quantité
+            productsInLS = parseLS()
             for (let l = 0; l < productsInLS.length; l++) {
                 if (itemModifId === productsInLS[l].id && itemModifColor === productsInLS[l].color) {
                     productsInLS[l].quantity = itemModifInputValue
@@ -134,9 +135,12 @@ modifCartElements()
  * @returns {}
  */
 function deleteCartElements() {
+    //On Récupère le bouton "supprimer" lequel on va écouter les évèvenements
     let deleteElement = document.querySelectorAll('.deleteItem')
 
+    //Pour chaque bouton "supprimer"
     for (let d = 0; d < deleteElement.length; d++) {
+        //On écoute sur celui qui vient d'être cliqué
         deleteElement[d].addEventListener('click', function (event) {
             event.preventDefault()
             let itemDeleteId = deleteElement[d].closest('.cart__item').dataset.id
@@ -144,7 +148,8 @@ function deleteCartElements() {
             let itemDeleteColor = deleteElement[d].closest('.cart__item').dataset.color
             console.log("La couleur de l'élément en cours de suppression est: " + itemDeleteColor)
             deleteElement[d].closest('.cart__item').remove()
-            let newLS = productsInLS.filter(product => product.id !== itemDeleteId && product.color !== itemDeleteColor)
+            productsInLS = parseLS()
+            let newLS = productsInLS.filter(product => product.id !== itemDeleteId || product.color !== itemDeleteColor)
             localStorage.setItem("panier", JSON.stringify(newLS))
             sumCartCalculate()
         })
