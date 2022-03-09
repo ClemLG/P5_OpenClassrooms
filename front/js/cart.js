@@ -1,3 +1,5 @@
+/*******************Récupération du panier dans le local storage et affichage des produits choisis**********************/
+
 //On récupère le tableau stocké dans le local storage et on le parse pour pouvoir l'utiliser
 let productsInLS = parseLS()
 console.log(productsInLS)
@@ -6,11 +8,11 @@ console.log(productsInLS)
 const injectCartSection = document.getElementById('cart__items')
 
 //On vérifie si le panier n'est pas vide
-if(!productsInLS){
+if (!productsInLS) {
     injectCartSection.innerHTML = `<p>Le panier est vide</p>`
 } else {
     //On parcours le tableau du panier et on affiche chaque produit
-    for(let i= 0; i < productsInLS.length; i++) {
+    for (let i = 0; i < productsInLS.length; i++) {
         console.log('Clé du tableau n°: ' + i)
         itemIteration = productsInLS[i]
         injectCartSection.innerHTML += `
@@ -39,17 +41,28 @@ if(!productsInLS){
     }
 }
 
-//On calcule la valeur totale du panier
+/*************************************************Calcul du Panier******************************************************/
+
 //On commence par calculer la quantité totale de produits dans le panier
-function sumCartCalculate(){
-let totalQtyItemsElement = document.getElementById('totalQuantity')
-let totalPriceItemsElement = document.getElementById('totalPrice')
-let totalQty = 0
-let totalPrice = 0
+
+/**
+ * Récupère la somme totale du panier en calculant la quantité de produits et le prix total par item
+ *
+ * @param
+ * @returns {}
+ */
+function sumCartCalculate() {
+    let totalQtyItemsElement = document.getElementById('totalQuantity')
+    let totalPriceItemsElement = document.getElementById('totalPrice')
+    let totalQty = 0
+    let totalPrice = 0
 
 
     let productsInLS = parseLS()
-    for(let i=0; i < productsInLS.length; i++) {
+    if (!productsInLS) {
+        productsInLS = []
+    }
+    for (let i = 0; i < productsInLS.length; i++) {
         //Pour chaque item du panier je veux récuperer sa quantité et stocker le total
         totalQty = parseInt(productsInLS[i].quantity) + parseInt(totalQty)
         console.log('Je rajoute la quantité: ' + totalQty);
@@ -67,14 +80,20 @@ let totalPrice = 0
 
 sumCartCalculate()
 
-//MODIFICATION
+//Modification du panier
 
+/**
+ * Écoute la modification de quantité depuis l'input de modification, réajuste les valeurs dans le DOM et le local storage et recalcule la somme du panier
+ *
+ * @param
+ * @returns {}
+ */
 function modifCartElements() {
     //Recuperation de l'element sur lequel on ecoute l'evenement
     let modifQty = document.querySelectorAll('.itemQuantity')
 
 //On boucle sur les tous les elements comportant l'input
-    for(let q=0; q < modifQty.length; q++){
+    for (let q = 0; q < modifQty.length; q++) {
         //On ecoute les modifications sur l'input, quand la valeur de celui ci change(event)
         modifQty[q].addEventListener('change', function (e) {
             // On stoppe l'évenement par défaut pour chaque input
@@ -84,7 +103,7 @@ function modifCartElements() {
             let itemModifId = modifQty[q].closest('.cart__item').dataset.id
             console.log("L'ID de l'element en cours de modification est: " + itemModifId)
             let itemModifColor = modifQty[q].closest('.cart__item').dataset.color
-            console.log("La couleur de l'élément en cours de modification est: " + itemModifColor )
+            console.log("La couleur de l'élément en cours de modification est: " + itemModifColor)
             let itemModifInputValue = modifQty[q].value
             console.log("La valeur de l'input en cours de modification est: " + itemModifInputValue)
             //On modifie le dom avec le innerhtml du panier(total(): €) pour le refleter la nouvelle quantité
@@ -92,8 +111,8 @@ function modifCartElements() {
             console.log("La nouvelle quantité: " + itemModifQty)
             //On recupère dans le localstorage le produit dont l'id et la couleur correspondent avec celui qui vient d'être modifié
             //On modifie dans le localstorage la quantité du produit pour refleter la nouvelle quantité
-            for(let l=0; l < productsInLS.length; l++){
-                if(itemModifId === productsInLS[l].id && itemModifColor === productsInLS[l].color){
+            for (let l = 0; l < productsInLS.length; l++) {
+                if (itemModifId === productsInLS[l].id && itemModifColor === productsInLS[l].color) {
                     productsInLS[l].quantity = itemModifInputValue
                     localStorage.setItem("panier", JSON.stringify(productsInLS))
                     //On recalcule la somme du panier en utilisant la fonction sumCartCalculate
@@ -101,17 +120,23 @@ function modifCartElements() {
                 }
             }
         })
-}
+    }
 }
 
 modifCartElements()
 
-//SUPPRESSION
+//Suppression d'articles
 
+/**
+ * Écoute sur le bouton supprimer d'un article, supprime l'article correspondant, met à jour le local storage et recalcule la somme du panier
+ *
+ * @param
+ * @returns {}
+ */
 function deleteCartElements() {
     let deleteElement = document.querySelectorAll('.deleteItem')
 
-    for(let d=0; d < deleteElement.length; d++){
+    for (let d = 0; d < deleteElement.length; d++) {
         deleteElement[d].addEventListener('click', function (event) {
             event.preventDefault()
             let itemDeleteId = deleteElement[d].closest('.cart__item').dataset.id
@@ -128,8 +153,14 @@ function deleteCartElements() {
 
 deleteCartElements()
 
-/******************************Analyse & Envoi du formulaire******************************/
+/*******************************************Analyse & Envoi du formulaire***********************************************/
 
+/**
+ * Écoute sur chaque champs du formulaire, vérifie si les saisies sont valides, envoi les données à l'api, si valides, récupère la page confirmation
+ *
+ * @param
+ * @returns {}
+ */
 function getForm() {
     //Récupèration de l'élement HTML du formulaire
     let form = document.querySelector('.cart__order__form')
@@ -139,27 +170,27 @@ function getForm() {
     //ÉCOUTE DES INPUTS
 
     //First Name
-    form.firstName.addEventListener('change', function() {
-    validFirstName(this)
+    form.firstName.addEventListener('change', function () {
+        validFirstName(this)
     })
 
     //Last Name
-    form.lastName.addEventListener('change', function() {
-    validLastName(this)
+    form.lastName.addEventListener('change', function () {
+        validLastName(this)
     })
 
     //City
-    form.city.addEventListener('change', function() {
-    validCity(this)
+    form.city.addEventListener('change', function () {
+        validCity(this)
     })
 
     //Address
-    form.address.addEventListener('change', function() {
+    form.address.addEventListener('change', function () {
         validAddress(this)
     })
 
     //Email
-    form.email.addEventListener('change', function() {
+    form.email.addEventListener('change', function () {
         validEmail(this)
     })
 
@@ -171,7 +202,7 @@ function getForm() {
         let firstNameRegExp = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ ,.\'-]+$/i
         let testFirstName = firstNameRegExp.test(inputFirstName.value)
         console.log('Résultat test regex firstName: ' + testFirstName)
-        if(!testFirstName){
+        if (!testFirstName) {
             let firstNameError = document.querySelector('.cart__order__form__question #firstNameErrorMsg')
             firstNameError.innerHTML = "Le prénom ne doit pas comporter de chiffres ou de caractères spéciaux"
             return false
@@ -188,7 +219,7 @@ function getForm() {
         let lastNameRegExp = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ ,.\'-]+$/i
         let testLastName = lastNameRegExp.test(inputLastName.value)
         console.log('Résultat test regex lastName: ' + testLastName)
-        if(!testLastName){
+        if (!testLastName) {
             let lastNameError = document.querySelector('.cart__order__form__question #lastNameErrorMsg')
             lastNameError.innerHTML = "Le nom ne doit pas comporter de chiffres ou de caractères spéciaux"
             return false
@@ -203,9 +234,9 @@ function getForm() {
     function validCity(inputCity) {
         //Regex pour la validation City
         let cityRegExp = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ ,.\'-]+$/i
-        let testCity= cityRegExp.test(inputCity.value)
+        let testCity = cityRegExp.test(inputCity.value)
         console.log('Résultat test regex City: ' + testCity)
-        if(!testCity){
+        if (!testCity) {
             let cityError = document.querySelector('.cart__order__form__question #cityErrorMsg')
             cityError.innerHTML = "La ville ne doit pas comporter de chiffres ou de caractères spéciaux"
             return false
@@ -222,7 +253,7 @@ function getForm() {
         let addressRegExp = /^[a-zA-Z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœÁÀÂÄÃÅÇÉÈÊËÍÌÎÏÑÓÒÔÖÕÚÙÛÜÝŸÆŒ\s,.'-]*$/
         let testAddress = addressRegExp.test(inputAddress.value)
         console.log('Résultat test regex Adresse: ' + testAddress)
-        if(!testAddress){
+        if (!testAddress) {
             let addressError = document.querySelector('.cart__order__form__question #addressErrorMsg')
             addressError.innerHTML = "Adresse incorrecte"
             return false
@@ -236,10 +267,10 @@ function getForm() {
     //Validation Email
     function validEmail(inputEmail) {
         //Regex pour la validation Email
-        let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$','g')
+        let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g')
         let testEmail = emailRegExp.test(inputEmail.value)
         console.log('Résultat test Email: ' + testEmail)
-        if(!testEmail){
+        if (!testEmail) {
             let emailError = document.querySelector('.cart__order__form__question #emailErrorMsg')
             emailError.innerHTML = "Email Incorrect"
             return false
@@ -254,10 +285,10 @@ function getForm() {
 
     //Ecoute du bouton submit
     let submitButton = document.querySelector('#order')
-    submitButton.addEventListener('click', function(e) {
+    submitButton.addEventListener('click', function (e) {
         //La soumission du formulaire n'étant pour l'instant pas sécurisée, nous cassons l'action du submit pour pouvoir avant vérifier si tous les champs renvoient true
         e.preventDefault()
-        if(validFirstName(form.firstName) && validLastName(form.lastName) && validCity(form.city) && validAddress(form.address) && (validEmail(form.email))){
+        if (validFirstName(form.firstName) && validLastName(form.lastName) && validCity(form.city) && validAddress(form.address) && (validEmail(form.email))) {
             //Si tous les champs renvoient true, alors on constitue un objet contact et un tableau de produit qu'on envoi à l'api
             console.log('Envoi formulaire valide')
 
@@ -270,19 +301,19 @@ function getForm() {
 
             //On créer le tableau qui va nous afficher l'id des produit du panier
             let idProducts = [];
-            for (let i = 0; i < productsInLS.length;i++) {
+            for (let i = 0; i < productsInLS.length; i++) {
                 idProducts.push(productsInLS[i].id);
             }
             console.log(idProducts);
 
             //On créer et initialise l'objet contact conmprenant les champs ainsi que l'initialisation du tableau produit
             const order = {
-                contact : {
-                    firstName:firstNameInput.value,
-                    lastName:lastNameInput.value,
-                    address:addressInput.value,
-                    city:cityInput.value,
-                    email:emailInput.value
+                contact: {
+                    firstName: firstNameInput.value,
+                    lastName: lastNameInput.value,
+                    address: addressInput.value,
+                    city: cityInput.value,
+                    email: emailInput.value
                 },
                 products: idProducts,
             }
@@ -298,18 +329,16 @@ function getForm() {
                     "Content-Type": "application/json"
                 },
             };
-
+            console.log("Status de l'envoi" + sendDataOptions)
             //Récupération de la réponse de l'api et si validation affichage de la page confirmation
             fetch("http://localhost:3000/api/products/order", sendDataOptions)
                 .then(handleResponse)
                 .then((data) => {
                     console.log(data);
-                    localStorage.setItem("orderId", data.orderId);
-
-                    document.location.href = "confirmation.html";
+                    document.location.href = "confirmation.html?orderId=" + data.orderId;
                 })
                 .catch((err) => {
-                    alert ("Request Error : " + err.message);
+                    alert("Request Error : " + err.message);
                 });
         } else {
             //On ne fait rien
